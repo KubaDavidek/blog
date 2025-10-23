@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog z MongoDB</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f3f3f3; color: #222; }
+    h1 { text-align: center; font-size: 32px; margin-bottom: 25px; }
+    .post {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 900px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .title { font-weight: bold; font-size: 22px; color: #2b2b2b; margin-bottom: 8px; }
+    .content { margin-top: 10px; line-height: 1.5; }
+    .meta { font-size: 13px; color: #666; margin-top: 10px; }
+    a { color: #0077cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>📰 Blogové příspěvky</h1>
+  <div id="posts">Načítám data...</div>
+
+  <script>
+    fetch("http://localhost:3000/posts")
+      .then(res => res.json())
+      .then(data => {
+        const div = document.getElementById("posts");
+        div.innerHTML = "";
+        data.forEach(p => {
+          const el = document.createElement("div");
+          el.className = "post";
+          el.innerHTML = `
+            <div class="title">${p.headline || p.content?.substring(0, 60) + "..." || "(bez názvu)"}</div>
+            <div class="content">${p.content || "(bez obsahu)"}</div>
+            <div class="meta">
+              🗓️ ${p.createdDate ? new Date(p.createdDate).toLocaleDateString("cs-CZ") : ""}
+              ${p.url ? ` | <a href="${p.url}" target="_blank">Číst celý článek</a>` : ""}
+            </div>
+          `;
+          div.appendChild(el);
+        });
+      })
+      .catch(err => {
+        document.getElementById("posts").innerText = "❌ Chyba při načítání dat.";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
