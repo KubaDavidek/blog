@@ -4,4 +4,3 @@ Data se načítají z kolekce v MongoDB, která obsahuje články importované z
 Projekt běží na portu 3000 a obsahuje propojení s Nginx pro servírování webu.
 Repozitář slouží jako ukázka propojení databáze, serveru a frontendu."
 
-TEST
